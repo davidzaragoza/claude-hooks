@@ -307,4 +307,3 @@ MIT License - see LICENSE file for details
 ## Support
 
 - **Issues**: [GitHub Issues](https://github.com/davidzaragoza/claude-hooks/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/davidzaragoza/claude-hooks/discussions)

@@ -1,8 +1,22 @@
 // Logging service with configurable log levels
 
 import { appendFile } from "node:fs/promises";
+import { dirname, join, isAbsolute } from "path";
 import type { LogLevel } from "../types/Config";
 import { loadConfig } from "./config";
+
+// Get the project root directory (two levels up from this file: src/services -> src -> root)
+const PROJECT_ROOT = join(dirname(import.meta.dir), "..");
+
+/**
+ * Resolves a log file path to an absolute path relative to the project root
+ */
+function resolveLogPath(logFile: string): string {
+  if (isAbsolute(logFile)) {
+    return logFile;
+  }
+  return join(PROJECT_ROOT, logFile);
+}
 
 // Log level priority (higher number = more severe)
 const LOG_LEVEL_PRIORITY: Record<LogLevel, number> = {
@@ -54,7 +68,8 @@ export class Logger {
   private async writeToLog(formattedMessage: string): Promise<void> {
     try {
       const config = await loadConfig();
-      await appendFile(config.logFile, formattedMessage);
+      const logPath = resolveLogPath(config.logFile);
+      await appendFile(logPath, formattedMessage);
     } catch (error) {
       console.error(`Failed to write to log file: ${error}`);
     }

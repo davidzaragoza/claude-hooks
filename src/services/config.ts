@@ -1,8 +1,12 @@
 // Configuration loader service
 
 import type { Config, DEFAULT_CONFIG } from "../types/Config";
+import { dirname, join } from "path";
 
 let cachedConfig: Config | null = null;
+
+// Get the project root directory (two levels up from this file: src/services -> src -> root)
+const PROJECT_ROOT = join(dirname(import.meta.dir), "..");
 
 /**
  * Loads configuration from config.json in the project root
@@ -15,7 +19,7 @@ export async function loadConfig(): Promise<Config> {
   }
 
   try {
-    const configPath = "./config.json";
+    const configPath = join(PROJECT_ROOT, "config.json");
     const file = Bun.file(configPath);
     const exists = await file.exists();
 
